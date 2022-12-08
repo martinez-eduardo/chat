@@ -37,7 +37,7 @@ func createView() {
 
 	btnDlg.OnClick(func(ev ui.Event) {
 		Texto := edUser.Title()
-		btnDlgs.SetLineCount(10) 
+		btnDlgs.SetLineCount(11) 
 		btnDlgs.OnDrawLine(func(ind int) string {
 			switch ind {
 				case 0:
@@ -62,6 +62,8 @@ func createView() {
 				case 9:
 					return fmt.Sprintf("Veronica: Hola")
 
+				case 10:
+					return fmt.Sprintf(" ")
 				default:
 					return fmt.Sprintf("FIN")
 			}
