@@ -17,6 +17,7 @@ var (
 	saladechat []byte
 )
 
+//Funcion para actualizar saladechat y para enviar mensajes
 func Chatear(mensaje string) bool {
 	linkparseado, conexionerror := url.Parse(urlchat)
 	if conexionerror != nil {
@@ -42,6 +43,7 @@ func Chatear(mensaje string) bool {
 	return true
 }
 
+//Funcion para crear interfaz grafica
 func createView() *ui.TextDisplay {
 	//Creamos ventana
 	view := ui.AddWindow(0, 0, 30, 7, "Chat")
@@ -74,6 +76,7 @@ func createView() *ui.TextDisplay {
 	return txtchat
 }
 
+//Funcion para aperturar la interfaz grafica y sus procesos en paralelo
 func mainLoop() {
 	user, errorfatal := user.Current()
 	if errorfatal == nil{
@@ -108,7 +111,7 @@ func mainLoop() {
 						}
 					})
 					ui.PutEvent(ui.Event{Type: ui.EventRedraw})
-					time.Sleep(1 * time.Second) //ESPERAR UN SEGUNDO PARA VOLVER A VERIFICAR NUEVOS MENSAJES
+					time.Sleep(1 * time.Second) //ESPERAR UN SEGUNDO PARA VOLVER A ACTUALIZAR MENSAJES
 				}  
 			}
 		}()
@@ -116,6 +119,7 @@ func mainLoop() {
 	}
 }
 
+//Funcion Main
 func main() {
 	mainLoop()
 }
