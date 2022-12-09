@@ -17,6 +17,31 @@ var (
 	saladechat []byte
 )
 
+func Chatear(mensaje string) bool {
+	linkparseado, conexionerror := url.Parse(urlchat)
+	if conexionerror != nil {
+		return false
+	}
+	parametros := url.Values{}
+	parametros.Add("nombre", usuario)
+	parametros.Add("mensaje", mensaje)
+	linkparseado.RawQuery = parametros.Encode()
+	respuesta, conexionerror := http.Get(linkparseado.String()) 
+	if conexionerror != nil {
+		return false
+	}
+	defer respuesta.Body.Close()
+	if respuesta.StatusCode != 200 {
+		return false
+	}
+	saladechat, conexionerror = ioutil.ReadAll(respuesta.Body)
+	if conexionerror != nil {
+		return false
+	}
+	respuesta.Body.Close()
+	return true
+}
+
 func createView() *ui.TextDisplay {
 	//Creamos ventana
 	view := ui.AddWindow(0, 0, 30, 7, "Chat")
@@ -73,25 +98,10 @@ func mainLoop() {
 						switch ind {
 							case 0, 2, 4, 6, 8, 10:
 								return fmt.Sprintf(" ")
-							case 1:
+							case 1, 3, 5, 7, 9:
 								if len(lineas_nuevas)< 1 { return fmt.Sprintf(" ") } 
-								campos := strings.Split(lineas_nuevas[0], ";")
-								if len(campos) == 3 { return fmt.Sprintf("%s: %s", campos[1], campos[2]) } else { return fmt.Sprintf(" ") }
-							case 3:
-								if len(lineas_nuevas)< 2 { return fmt.Sprintf(" ") } 
-								campos := strings.Split(lineas_nuevas[1], ";")
-								if len(campos) == 3 { return fmt.Sprintf("%s: %s", campos[1], campos[2]) } else { return fmt.Sprintf(" ") }
-							case 5:
-								if len(lineas_nuevas)< 3 { return fmt.Sprintf(" ") } 
-								campos := strings.Split(lineas_nuevas[2], ";")
-								if len(campos) == 3 { return fmt.Sprintf("%s: %s", campos[1], campos[2]) } else { return fmt.Sprintf(" ") }
-							case 7:
-								if len(lineas_nuevas)< 4 { return fmt.Sprintf(" ") } 
-								campos := strings.Split(lineas_nuevas[3], ";")
-								if len(campos) == 3 { return fmt.Sprintf("%s: %s", campos[1], campos[2]) } else { return fmt.Sprintf(" ") }
-							case 9:
-								if len(lineas_nuevas)< 5 { return fmt.Sprintf(" ") } 
-								campos := strings.Split(lineas_nuevas[4], ";")
+								variable := (ind - 1) - ((ind - 1)/2) //sucesion: 0,1,2,3,4 a partir de: 1,3,5,7,9
+								campos := strings.Split(lineas_nuevas[variable], ";")
 								if len(campos) == 3 { return fmt.Sprintf("%s: %s", campos[1], campos[2]) } else { return fmt.Sprintf(" ") }
 							default:
 								return fmt.Sprintf("FIN")
@@ -110,27 +120,3 @@ func main() {
 	mainLoop()
 }
 
-func Chatear(mensaje string) bool {
-	linkparseado, conexionerror := url.Parse(urlchat)
-	if conexionerror != nil {
-		return false
-	}
-	parametros := url.Values{}
-	parametros.Add("nombre", usuario)
-	parametros.Add("mensaje", mensaje)
-	linkparseado.RawQuery = parametros.Encode()
-	respuesta, conexionerror := http.Get(linkparseado.String()) 
-	if conexionerror != nil {
-		return false
-	}
-	defer respuesta.Body.Close()
-	if respuesta.StatusCode != 200 {
-		return false
-	}
-	saladechat, conexionerror = ioutil.ReadAll(respuesta.Body)
-	if conexionerror != nil {
-		return false
-	}
-	respuesta.Body.Close()
-	return true
-}
