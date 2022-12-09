@@ -1,4 +1,4 @@
-module login
+module gitlab.com/RicardoValladares/chat
 
 go 1.19
 
