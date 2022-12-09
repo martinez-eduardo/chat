@@ -102,8 +102,8 @@ func mainLoop() {
 							case 0, 2, 4, 6, 8, 10:
 								return fmt.Sprintf(" ")
 							case 1, 3, 5, 7, 9:
-								if len(lineas_nuevas)< 1 { return fmt.Sprintf(" ") } 
 								variable := (ind - 1) - ((ind - 1)/2) //sucesion: 0,1,2,3,4 a partir de: 1,3,5,7,9
+								if len(lineas_nuevas)< (variable+1) { return fmt.Sprintf(" ") } 
 								campos := strings.Split(lineas_nuevas[variable], ";")
 								if len(campos) == 3 { return fmt.Sprintf("%s: %s", campos[1], campos[2]) } else { return fmt.Sprintf(" ") }
 							default:
